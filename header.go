@@ -32,9 +32,10 @@ func (s Security) GenerateAuthHeader() (string, *SecurityError) {
 		return "", &SecurityError{Message: "Could not generate random nonce"}
 	}
 
+	encodedNonce := base64Encode(nonce)
 	created := time.Now().Format(time.RFC3339)
 
-	digest, err := s.GenerateDigest(string(nonce), created)
+	digest, err := s.GenerateDigest(encodedNonce, created)
 	if err != nil {
 		return "", err
 	}
