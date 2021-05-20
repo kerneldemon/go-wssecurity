@@ -1,6 +1,7 @@
 package wssecurity
 
 import (
+	"crypto/rand"
 	"fmt"
 	"regexp"
 	"time"
@@ -26,6 +27,11 @@ func ExtractHeaderProperties(decodedHeader string) map[string]string {
 
 func (s Security) GenerateAuthHeader() (string, *SecurityError) {
 	nonce := make([]byte, NonceLength)
+	_, nonceErr := rand.Read(nonce)
+	if nonceErr != nil {
+		return "", &SecurityError{Message: "Could not generate random nonce"}
+	}
+
 	created := time.Now().Format(time.RFC3339)
 
 	digest, err := s.GenerateDigest(string(nonce), created)
