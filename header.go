@@ -2,6 +2,7 @@ package wssecurity
 
 import (
 	"crypto/rand"
+	"encoding/hex"
 	"fmt"
 	"regexp"
 	"time"
@@ -32,7 +33,7 @@ func (s Security) GenerateAuthHeader() (string, *SecurityError) {
 		return "", &SecurityError{Message: "Could not generate random nonce"}
 	}
 
-	encodedNonce := base64Encode(nonce)
+	encodedNonce := hex.EncodeToString(nonce)
 	created := time.Now().Format(time.RFC3339)
 
 	digest, err := s.GenerateDigest(encodedNonce, created)
@@ -44,7 +45,7 @@ func (s Security) GenerateAuthHeader() (string, *SecurityError) {
 		AuthString,
 		s.Username,
 		digest,
-		base64Encode(nonce),
+		base64Encode([]byte(encodedNonce)),
 		created,
 	), nil
 }
