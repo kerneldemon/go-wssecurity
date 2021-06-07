@@ -26,7 +26,7 @@ s := wssecurity.Security{
     Lifetime: 10,
 }
 
-header := s.GenerateAuthHeader()
+header, err := s.GenerateAuthHeader()
 ```
 
 ## Base64-encode the header
