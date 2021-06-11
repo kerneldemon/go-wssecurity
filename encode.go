@@ -8,7 +8,7 @@ import (
 func base64Decode(encodedString string) (string, *SecurityError) {
 	decodedBytes, err := base64.StdEncoding.DecodeString(encodedString)
 	if err != nil {
-		return "", &SecurityError{"Failed to base64 decode string"}
+		return "", NewSecurityError("Failed to base64 decode string")
 	}
 
 	return string(decodedBytes), nil

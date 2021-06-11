@@ -12,25 +12,29 @@ const AuthPattern = `^UsernameToken Username="(?P<Username>.+)", PasswordDigest=
 const AuthString = `UsernameToken Username="%s", PasswordDigest="%s", Nonce="%s", Created="%s"`
 const NonceLength = 16
 
-func ExtractHeaderProperties(decodedHeader string) map[string]string {
+func ExtractHeaderProperties(decodedHeader string) (map[string]string, *SecurityError) {
+	result := make(map[string]string)
+
 	exp := regexp.MustCompile(AuthPattern)
 	match := exp.FindStringSubmatch(decodedHeader)
+	if match == nil {
+		return result, NewSecurityError("Failed to parse auth string")
+	}
 
-	result := make(map[string]string)
 	for i, name := range exp.SubexpNames() {
 		if i != 0 && name != "" {
 			result[name] = match[i]
 		}
 	}
 
-	return result
+	return result, nil
 }
 
 func (s Security) GenerateAuthHeader() (string, *SecurityError) {
 	nonce := make([]byte, NonceLength)
 	_, nonceErr := rand.Read(nonce)
 	if nonceErr != nil {
-		return "", &SecurityError{Message: "Could not generate random nonce"}
+		return "", NewSecurityError("Could not generate random nonce")
 	}
 
 	encodedNonce := hex.EncodeToString(nonce)

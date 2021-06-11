@@ -5,13 +5,13 @@ A package for [WS Security](https://doc.oroinc.com/api/authentication/wsse/)
 ## Checking if the WSSE header is valid
 
 ```go
-s := wssecurity.Security{
+headerSecurity := wssecurity.NewSecurity(
     Username: "my_user",
     Secret:   "my_secret",
     Lifetime: 10,
-}
+)
 
-isAuthSuccessful, err := s.IsAuthSuccessful(header)
+isAuthSuccessful, err := headerSecurity.IsAuthSuccessful(header)
 if err != nil {
     fmt.Printf("Error during auth %v", err)
     return false, nil
@@ -20,13 +20,13 @@ if err != nil {
 
 ## Generate a WSSE header
 ```go
-s := wssecurity.Security{
+headerSecurity := wssecurity.NewSecurity(
     Username: "my_user",
     Secret:   "my_secret",
     Lifetime: 10,
-}
+)
 
-header, err := s.GenerateAuthHeader()
+header, err := headerSecurity.GenerateAuthHeader()
 ```
 
 ## Base64-encode the header
