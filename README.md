@@ -21,9 +21,9 @@ if err != nil {
 ## Generate a WSSE header
 ```go
 headerSecurity := wssecurity.NewSecurity(
-    Username: "my_user",
-    Secret:   "my_secret",
-    Lifetime: 10,
+    "my_user",
+    "my_secret",
+    10,
 )
 
 header, err := headerSecurity.GenerateAuthHeader()
