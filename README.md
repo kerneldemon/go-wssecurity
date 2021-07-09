@@ -6,9 +6,9 @@ A package for [WS Security](https://doc.oroinc.com/api/authentication/wsse/)
 
 ```go
 headerSecurity := wssecurity.NewSecurity(
-    Username: "my_user",
-    Secret:   "my_secret",
-    Lifetime: 10,
+    "my_user",
+    "my_secret",
+    10,
 )
 
 isAuthSuccessful, err := headerSecurity.IsAuthSuccessful(header)
